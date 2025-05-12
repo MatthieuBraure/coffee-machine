@@ -1,0 +1,70 @@
+<?php
+
+namespace App\CoffeeMachine\Domain\Entity;
+
+use App\CoffeeMachine\Infrastructure\Repository\CoffeeMachineRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: CoffeeMachineRepository::class)]
+class CoffeeMachine
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 255)]
+    private CoffeeMachineStatus $status;
+
+    #[ORM\Column]
+    private \DateTimeImmutable $updatedAt;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getStatus(): CoffeeMachineStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(CoffeeMachineStatus $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function start(): void
+    {
+        $this->status = CoffeeMachineStatus::STARTING;
+    }
+
+    public function stop(): void
+    {
+        $this->status = CoffeeMachineStatus::SHUTDOWN;
+    }
+
+    public function isStarted(): bool
+    {
+        return $this->status->value === CoffeeMachineStatus::READY->value;
+    }
+
+    public function isStopped(): bool
+    {
+        return $this->status->value === CoffeeMachineStatus::OFF->value;
+    }
+}

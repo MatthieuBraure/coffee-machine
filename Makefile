@@ -39,7 +39,8 @@ test: ## Start tests with phpunit, pass the parameter "c=" to add options to php
 	@$(eval c ?=)
 	@$(DOCKER_COMP) exec -e APP_ENV=test php bin/phpunit $(c)
 
-
+ps:
+	@$(DOCKER_COMP) ps
 ## —— Composer 🧙 ——————————————————————————————————————————————————————————————
 composer: ## Run composer, pass the parameter "c=" to run a given command, example: make composer c='req symfony/orm-pack'
 	@$(eval c ?=)
@@ -56,3 +57,14 @@ sf: ## List all Symfony commands or pass the parameter "c=" to run a given comma
 
 cc: c=c:c ## Clear the cache
 cc: sf
+
+## —— QA 🧐 ————————————————————————————————————————————————————————————————
+php-cs-fixer: ## Run php-cs-fixer
+php-cs-fixer:
+	@$(PHP_CONT) vendor/bin/php-cs-fixer fix
+
+phpstan: ## Run phpstan
+phpstan:
+	@$(PHP_CONT) vendor/bin/phpstan analyse
+
+lint: php-cs-fixer phpstan ## Run all linters

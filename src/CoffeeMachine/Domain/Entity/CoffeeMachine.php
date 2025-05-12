@@ -51,11 +51,25 @@ class CoffeeMachine
     public function start(): void
     {
         $this->status = CoffeeMachineStatus::STARTING;
+        $this->updatedAt = new \DateTimeImmutable('now');
+    }
+
+    public function ready(): void
+    {
+        $this->status = CoffeeMachineStatus::READY;
+        $this->updatedAt = new \DateTimeImmutable('now');
+    }
+
+    public function shutdown(): void
+    {
+        $this->status = CoffeeMachineStatus::SHUTDOWN;
+        $this->updatedAt = new \DateTimeImmutable('now');
     }
 
     public function stop(): void
     {
-        $this->status = CoffeeMachineStatus::SHUTDOWN;
+        $this->status = CoffeeMachineStatus::OFF;
+        $this->updatedAt = new \DateTimeImmutable('now');
     }
 
     public function isStarted(): bool

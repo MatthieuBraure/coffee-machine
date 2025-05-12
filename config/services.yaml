@@ -42,6 +42,17 @@ services:
                   name: "messenger.message_handler",
                   bus: "messenger.bus.commands",
               }
+            
+    api_event_handlers:
+        namespace: App\CoffeeMachine\Application\Event\
+        resource: "../src/CoffeeMachine/Application/Event/**/*EventHandler.php"
+        public: true
+        tags:
+            - {
+                  name: "messenger.message_handler",
+                  bus: "messenger.bus.commands",
+              }
+            
     query_bus:
         class: App\Shared\Infrastructure\SymfonyMessengerBus
         arguments: ["@messenger.bus.queries"]

@@ -6,7 +6,7 @@ use App\CoffeeMachine\Domain\Entity\CoffeeMachine;
 
 interface CoffeeMachineRepositoryInterface
 {
-    public function get(): CoffeeMachine;
+    public function get(?int $id = null): CoffeeMachine;
 
     public function save(CoffeeMachine $entity): void;
 }

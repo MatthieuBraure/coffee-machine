@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Shared\Infrastructure;
 
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
 
 class SymfonyMessengerBus implements CommandBusInterface, QueryBusInterface
 {
@@ -31,6 +33,16 @@ class SymfonyMessengerBus implements CommandBusInterface, QueryBusInterface
 
             throw $previous;
         }
+    }
+
+    public function dispatchEvent(object $event): void
+    {
+        $envelope = Envelope::wrap($event, [
+            // See https://symfony.com/doc/current/messenger/message-recorder.html
+            new DispatchAfterCurrentBusStamp(),
+        ]);
+
+        $this->messageBus->dispatch($envelope);
     }
 
     public function getMessageBus(): MessageBusInterface

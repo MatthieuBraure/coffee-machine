@@ -23,8 +23,8 @@ framework:
             # sync: 'sync://'
 
         routing:
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            App\CoffeeMachine\Application\Event\MachineStartedEvent: async
+            App\CoffeeMachine\Application\Event\MachineStoppedEvent: async
 
 # when@test:
 #    framework:

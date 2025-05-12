@@ -19,9 +19,11 @@ class CoffeeMachineRepository extends ServiceEntityRepository implements CoffeeM
         parent::__construct($registry, CoffeeMachine::class);
     }
 
-    public function get(): CoffeeMachine
+    public function get(?int $id = null): CoffeeMachine
     {
-        return $this->find(self::MACHINE_ID);
+        $id = $id ?? self::MACHINE_ID;
+
+        return $this->find($id);
     }
 
     public function save(CoffeeMachine $entity): void

@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\CoffeeMachine\Infrastructure\Controller;
 
 use App\CoffeeMachine\Application\Command\OrderCoffeeCommand;
+use App\CoffeeMachine\Application\Query\CompletedOrderQuery;
+use App\CoffeeMachine\Application\Query\PendingOrderQuery;
 use App\CoffeeMachine\Domain\Entity\CoffeeSize;
 use App\CoffeeMachine\Infrastructure\Exception\ValidationException;
 use App\Shared\Infrastructure\CommandBusInterface;
+use App\Shared\Infrastructure\QueryBusInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +21,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class CoffeeController extends AbstractController
 {
     public function __construct(
-        private readonly CommandBusInterface $commandBus)
-    {
+        private readonly CommandBusInterface $commandBus,
+        private readonly QueryBusInterface $queryBus,
+    ) {
     }
 
     #[Route('/api/coffee/order', name: 'api_coffee_order', methods: ['PUT'])]
@@ -37,5 +41,17 @@ class CoffeeController extends AbstractController
         } catch (ValidationFailedException $exception) {
             throw new ValidationException($exception->getViolations());
         }
+    }
+
+    #[Route('/api/coffee/pending', name: 'api_coffee_pending', methods: ['GET'])]
+    public function pending(): Response
+    {
+        return new JsonResponse($this->queryBus->handle(new PendingOrderQuery()));
+    }
+
+    #[Route('/api/coffee/completed', name: 'api_coffee_completed', methods: ['GET'])]
+    public function complete(): Response
+    {
+        return new JsonResponse($this->queryBus->handle(new CompletedOrderQuery()));
     }
 }

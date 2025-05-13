@@ -9,4 +9,14 @@ interface OrderRepositoryInterface
     public function get(int $id): Order;
 
     public function save(Order $entity): void;
+
+    /**
+     * @return array<Order>
+     */
+    public function getPending(): array;
+
+    /**
+     * @return array<Order>
+     */
+    public function getCompleted(): array;
 }

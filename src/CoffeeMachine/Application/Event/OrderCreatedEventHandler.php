@@ -7,14 +7,12 @@ namespace App\CoffeeMachine\Application\Event;
 use App\CoffeeMachine\Domain\Entity\CoffeeSize;
 use App\CoffeeMachine\Domain\Repository\CoffeeMachineRepositoryInterface;
 use App\CoffeeMachine\Domain\Repository\OrderRepositoryInterface;
-use Doctrine\DBAL\Connection;
 
 class OrderCreatedEventHandler
 {
     public function __construct(
         private readonly CoffeeMachineRepositoryInterface $coffeeMachineRepository,
         private readonly OrderRepositoryInterface $orderRepository,
-        private Connection $connection,
     ) {
     }
 

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>☕ Machine à café - Les dernières commandes</h2>
+
+    {% for date, orders in ordersByDay %}
+        <section>
+            <h2>{{ date }}</h2>
+            <ul>
+                {% for order in orders %}
+                    <li>
+                        <strong>Taille :</strong> {{ order.size.value }} <br>
+                        <strong>Intensité :</strong> {{ order.intensity }} <br>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% else %}
+        <p>Aucune commande passée.</p>
+    {% endfor %}
+{% endblock %}

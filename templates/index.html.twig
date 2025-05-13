@@ -1,0 +1,194 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>☕ Machine à café</h2>
+
+    <p>
+        État actuel :
+        <strong id="machine-status" style="color: {{ {
+            'off': 'gray',
+            'starting': 'orange',
+            'ready': 'green',
+            'running': 'blue',
+            'shutdown': 'red'
+        }[machine.status]|default('black') }}">
+            {{ {
+                'off': '⛔ Éteinte',
+                'starting': '⚡ Démarrage...',
+                'ready': '✅ Prête',
+                'running': '☕ En préparation',
+                'shutdown': '🛑 Arrêt en cours...'
+            }[machine.status]|default('Inconnu') }}
+        </strong>
+    </p>
+
+    <button id="start-btn" >▶️ Démarrer</button>
+    <button id="stop-btn">⏹️ Arrêter</button>
+
+    <div style="display: flex; justify-content: space-between;">
+        <!-- Commande en cours -->
+        <div id="current-order" style="display: none; width: 45%;">
+            <h3>⏳ Commande en cours</h3>
+            <p><strong>Taille :</strong> <span id="current-size"></span></p>
+            <p><strong>Intensité :</strong> <span id="current-intensity"></span></p>
+            <p><strong>Depuis :</strong> <span id="current-start-time"></span></p>
+        </div>
+
+        <!-- Commandes en attente -->
+        <div id="pending-orders" style="width: 45%; display: none;">
+            <h3>🕒 Commandes en attente</h3>
+            <ul id="pending-orders-list"></ul>
+        </div>
+    </div>
+
+    <section id="coffee-order" style="{{ machine.status == 'ready' ? '' : 'display: none' }}">
+        <hr>
+        <h3>📦 Commander un café</h3>
+
+        <form id="coffee-form">
+            <label for="size">Taille :</label>
+            <select name="size" id="size" required>
+                {% for size in coffeeSizes %}
+                    <option value="{{ size.value }}">{{ size.value|capitalize }}</option>
+                {% endfor %}
+            </select>
+
+            <br><br>
+
+            <label for="intensity">Intensité : <span id="intensity-value">5</span></label>
+            <input type="range" id="intensity" name="intensity" min="1" max="10" value="5">
+
+            <br><br>
+
+            <button type="submit">☕ Commander</button>
+        </form>
+
+        <div id="coffee-message" style="margin-top: 10px; color: green;"></div>
+    </section>
+    <script>
+        const sectionOrder = document.getElementById('coffee-order');
+        const statusLabels = {
+            off: { label: "⛔ Éteinte", color: "gray" },
+            starting: { label: "⚡ Démarrage...", color: "orange" },
+            ready: { label: "✅ Prête", color: "green" },
+            running: { label: "☕ En préparation", color: "blue" },
+            shutdown: { label: "🛑 Arrêt en cours...", color: "red" },
+        };
+        function updateStyle(status) {
+            document.getElementById('start-btn').disabled = ['starting', 'ready', 'running', 'shutdown'].includes(status);
+            document.getElementById('stop-btn').disabled = ['off', 'shutdown'].includes(status);
+
+            sectionOrder.style.display = ['ready', 'running'].includes(status) ? '' : 'none';
+        }
+
+        updateStyle("{{ machine.status }}");
+        async function updateStatus() {
+            const res = await fetch('/api/coffee-machine/status');
+            const data = await res.json();
+            const status = data.status;
+            const el = document.getElementById('machine-status');
+
+            el.textContent = statusLabels[status]?.label || 'Inconnu';
+            el.style.color = statusLabels[status]?.color || 'black';
+            updateStyle(status);
+            if (status === 'running') {
+                updateProcessingOrder();
+            } else {
+                document.getElementById('current-order').style.display = 'none';
+            }
+            getPendingOrders();
+        }
+
+        async function updateProcessingOrder() {
+            const orderRes = await fetch('/api/coffee/processing');
+            if (orderRes.ok) {
+                const order = await orderRes.json();
+                document.getElementById('current-size').textContent = order.size;
+                document.getElementById('current-intensity').textContent = order.intensity;
+                document.getElementById('current-start-time').textContent = new Date(order.createdAt.date).toLocaleString();
+
+                document.getElementById('current-order').style.display = 'block';
+            } else {
+                document.getElementById('current-order').style.display = 'none';
+            }
+        }
+
+        async function getPendingOrders() {
+            // Récupérer et afficher les commandes en attente
+            const pendingRes = await fetch('/api/coffee/pending');
+            if (pendingRes.ok) {
+                const pendingOrders = await pendingRes.json();
+                const pendingList = document.getElementById('pending-orders-list');
+                pendingList.innerHTML = ''; // Vider la liste avant de la remplir
+
+                if (pendingOrders.length > 0) {
+                    pendingOrders.forEach(order => {
+                        const li = document.createElement('li');
+                        li.textContent = `${order.size} - Intensité : ${order.intensity}`;
+                        pendingList.appendChild(li);
+                    });
+                    document.getElementById('pending-orders').style.display = 'block';
+                } else {
+                    document.getElementById('pending-orders').style.display = 'none';
+                }
+            } else {
+                document.getElementById('pending-orders').style.display = 'none';
+            }
+        }
+        document.getElementById('start-btn').addEventListener('click', async () => {
+            await fetch('/api/coffee-machine/start', { method: 'POST' });
+            updateStatus();
+        });
+
+        document.getElementById('stop-btn').addEventListener('click', async () => {
+            await fetch('/api/coffee-machine/stop', { method: 'POST' });
+            updateStatus();
+        });
+
+        // Refresh status every 3 seconds
+        setInterval(updateStatus, 3000);
+        updateStatus();
+        // Orders
+        // Afficher la valeur actuelle du slider
+        document.getElementById('intensity').addEventListener('input', (e) => {
+            document.getElementById('intensity-value').textContent = e.target.value;
+        });
+
+        // Soumission du formulaire
+        document.getElementById('coffee-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const size = document.getElementById('size').value;
+            const intensity = parseInt(document.getElementById('intensity').value);
+
+            try {
+                const res = await fetch('/api/coffee/order', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ size, intensity }),
+                });
+
+                if (!res.ok) {
+                    throw new Error("Erreur lors de la commande");
+                }
+
+                document.getElementById('coffee-message').textContent = '✅ Café commandé avec succès !';
+                document.getElementById('coffee-message').style.color = 'green';
+
+                // Optionnel : reset le formulaire
+                document.getElementById('coffee-form').reset();
+                document.getElementById('intensity-value').textContent = 5;
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('coffee-message').textContent = '❌ Erreur lors de la commande';
+                document.getElementById('coffee-message').style.color = 'red';
+            }
+
+
+        });
+
+    </script>
+{% endblock %}

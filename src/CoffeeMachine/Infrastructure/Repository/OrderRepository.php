@@ -48,4 +48,14 @@ class OrderRepository extends ServiceEntityRepository implements OrderRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getProcessing(): ?Order
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.status = :status')
+            ->setParameter('status', OrderStatus::PROCESSING)
+            ->orderBy('o.updatedAt', 'DESC')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

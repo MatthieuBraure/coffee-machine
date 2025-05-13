@@ -116,4 +116,10 @@ class Order
         $this->status = OrderStatus::DONE;
         $this->updatedAt = new \DateTimeImmutable('now');
     }
+
+    public function cancel(): void
+    {
+        $this->status = OrderStatus::CANCELED;
+        $this->updatedAt = new \DateTimeImmutable('now');
+    }
 }

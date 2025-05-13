@@ -37,4 +37,22 @@ curl --request PUT \
     "intensity": 5
 }'
 ```
+- Get the order history
+```shell
+curl --request GET \
+--url https://localhost/api/coffee/completed \
+--header 'Content-Type: application/json'
+```
+- Get the processing order
+```shell
+curl --request GET \
+--url https://localhost/api/coffee/processing \
+--header 'Content-Type: application/json'
+```
+- Get the pending orders
+```shell
+curl --request GET \
+--url https://localhost/api/coffee/pending \
+--header 'Content-Type: application/json'
+```
 **Enjoy your coffee!**

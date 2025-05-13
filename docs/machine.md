@@ -22,14 +22,14 @@ SHUTDOWN => la machine s'éteint.
 
 ### Start
 La machine doit être OFF pour pouvoir être démarrée, passage à STARTING puis à READY
-
+Dès que la machine est prête, un evénement (MachineReadyEvent) est déclenché, il est responsable de relancer les anciennes commandes et d'annuler la commande en cours s'il y en a une.
 ### Stop
 Tous les états sont acceptés, passage à SHUTDOWN puis à OFF
 
 
 ## Reprise des commandes
-Aucune reprise n'est prévue. 
-On pourrait accepter une commande lorsque la machine est en STARTING en relançant toutes les commnandes en status PENDING.
+Lorsque la machine est éteinte, les commandes non traitées (status PENDING) sont conservées.
+Au redémarrage de la machine, les commandes en attente sont relancées (via l'event MachineReadyEvent).
 
 ## Gestion des commandes
 Le temps de préparation du café est défini par la machine et dépendant de la taille du café.

@@ -19,4 +19,6 @@ interface OrderRepositoryInterface
      * @return array<Order>
      */
     public function getCompleted(): array;
+
+    public function getProcessing(): ?Order;
 }

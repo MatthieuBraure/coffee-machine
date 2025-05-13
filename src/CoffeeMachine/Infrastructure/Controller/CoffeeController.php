@@ -7,6 +7,7 @@ namespace App\CoffeeMachine\Infrastructure\Controller;
 use App\CoffeeMachine\Application\Command\OrderCoffeeCommand;
 use App\CoffeeMachine\Application\Query\CompletedOrderQuery;
 use App\CoffeeMachine\Application\Query\PendingOrderQuery;
+use App\CoffeeMachine\Application\Query\ProcessingOrderQuery;
 use App\CoffeeMachine\Domain\Entity\CoffeeSize;
 use App\CoffeeMachine\Infrastructure\Exception\ValidationException;
 use App\Shared\Infrastructure\CommandBusInterface;
@@ -53,5 +54,11 @@ class CoffeeController extends AbstractController
     public function complete(): Response
     {
         return new JsonResponse($this->queryBus->handle(new CompletedOrderQuery()));
+    }
+
+    #[Route('/api/coffee/processing', name: 'api_coffee_processing', methods: ['GET'])]
+    public function processing(): Response
+    {
+        return new JsonResponse($this->queryBus->handle(new ProcessingOrderQuery()));
     }
 }

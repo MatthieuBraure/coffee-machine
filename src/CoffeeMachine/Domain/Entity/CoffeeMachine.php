@@ -81,4 +81,9 @@ class CoffeeMachine
     {
         return $this->status->value === CoffeeMachineStatus::OFF->value;
     }
+
+    public function canTakeOrder(): bool
+    {
+        return $this->status->value === CoffeeMachineStatus::READY->value;
+    }
 }

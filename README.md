@@ -27,5 +27,14 @@ curl --request POST \
 --url https://localhost/api/coffee-machine/stop \
 --header 'Content-Type: application/json'
 ```
-
+- Order a coffee
+```shell
+curl --request POST \
+--url https://localhost/api/coffee-machine/order \
+--header 'Content-Type: application/json' \
+--data '{
+    "size": "regular",
+    "intensity": 5
+}'
+```
 **Enjoy your coffee!**

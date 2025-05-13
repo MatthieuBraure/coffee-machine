@@ -36,7 +36,7 @@ class CoffeeMachineController extends AbstractController
         try {
             $this->commandBus->handle(new StartMachineCommand());
 
-            return new JsonResponse(['status' => 'ok']);
+            return new JsonResponse(['message' => 'ok'], Response::HTTP_ACCEPTED);
         } catch (ValidationFailedException $exception) {
             throw new ValidationException($exception->getViolations());
         }
@@ -48,7 +48,7 @@ class CoffeeMachineController extends AbstractController
         try {
             $this->commandBus->handle(new StopMachineCommand());
 
-            return new JsonResponse(['status' => 'ok']);
+            return new JsonResponse(['message' => 'ok'], Response::HTTP_ACCEPTED);
         } catch (ValidationFailedException $exception) {
             throw new ValidationException($exception->getViolations());
         }

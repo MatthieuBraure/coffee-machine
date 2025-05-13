@@ -29,7 +29,7 @@ curl --request POST \
 ```
 - Order a coffee
 ```shell
-curl --request POST \
+curl --request PUT \
 --url https://localhost/api/coffee-machine/order \
 --header 'Content-Type: application/json' \
 --data '{

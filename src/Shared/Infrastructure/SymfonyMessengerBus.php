@@ -10,7 +10,7 @@ use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
 
-class SymfonyMessengerBus implements CommandBusInterface, QueryBusInterface
+class SymfonyMessengerBus implements CommandBusInterface, QueryBusInterface, EventBusInterface
 {
     use HandleTrait {
         handle as doHandle;

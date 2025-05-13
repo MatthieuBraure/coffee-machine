@@ -50,7 +50,7 @@ services:
         tags:
             - {
                   name: "messenger.message_handler",
-                  bus: "messenger.bus.commands",
+                  bus: "messenger.bus.events",
               }
             
     query_bus:
@@ -60,7 +60,12 @@ services:
     command_bus:
         class: App\Shared\Infrastructure\SymfonyMessengerBus
         arguments: ["@messenger.bus.commands"]
+        
+    event_bus:
+        class: App\Shared\Infrastructure\SymfonyMessengerBus
+        arguments: ["@messenger.bus.events"]
     
     App\Shared\Infrastructure\CommandBusInterface: "@command_bus"
     App\Shared\Infrastructure\QueryBusInterface: "@query_bus"
+    App\Shared\Infrastructure\EventBusInterface: "@event_bus"
     

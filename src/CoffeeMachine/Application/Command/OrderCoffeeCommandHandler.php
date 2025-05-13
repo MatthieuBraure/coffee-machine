@@ -9,14 +9,14 @@ use App\CoffeeMachine\Application\Exception\MachineCannotTakeOrderException;
 use App\CoffeeMachine\Domain\Entity\Order;
 use App\CoffeeMachine\Domain\Repository\CoffeeMachineRepositoryInterface;
 use App\CoffeeMachine\Domain\Repository\OrderRepositoryInterface;
-use App\Shared\Infrastructure\CommandBusInterface;
+use App\Shared\Infrastructure\EventBusInterface;
 
 class OrderCoffeeCommandHandler
 {
     public function __construct(
         private readonly CoffeeMachineRepositoryInterface $coffeeMachineRepository,
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly CommandBusInterface $commandBus,
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 
@@ -32,6 +32,6 @@ class OrderCoffeeCommandHandler
             coffeeSize: $command->size,
         );
         $this->orderRepository->save($order);
-        $this->commandBus->dispatchEvent(new OrderCreatedEvent($order->getId()));
+        $this->eventBus->dispatchEvent(new OrderCreatedEvent($order->getId()));
     }
 }

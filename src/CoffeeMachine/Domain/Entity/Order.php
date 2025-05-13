@@ -104,4 +104,16 @@ class Order
 
         return $this;
     }
+
+    public function start(): void
+    {
+        $this->status = OrderStatus::PROCESSING;
+        $this->updatedAt = new \DateTimeImmutable('now');
+    }
+
+    public function finish(): void
+    {
+        $this->status = OrderStatus::DONE;
+        $this->updatedAt = new \DateTimeImmutable('now');
+    }
 }

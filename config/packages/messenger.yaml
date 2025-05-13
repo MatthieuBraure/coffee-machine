@@ -11,6 +11,11 @@ framework:
             messenger.bus.queries:
                 middleware:
                     - validation
+            messenger.bus.events:
+                middleware:
+                    - doctrine_ping_connection
+                    - doctrine_close_connection
+                    - validation
         failure_transport: failed
 
         transports:
@@ -25,6 +30,7 @@ framework:
         routing:
             App\CoffeeMachine\Application\Event\MachineStartedEvent: async
             App\CoffeeMachine\Application\Event\MachineStoppedEvent: async
+            App\CoffeeMachine\Application\Event\OrderCreatedEvent: async
 
 # when@test:
 #    framework:

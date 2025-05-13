@@ -6,13 +6,13 @@ namespace App\CoffeeMachine\Application\Command;
 
 use App\CoffeeMachine\Application\Event\MachineStartedEvent;
 use App\CoffeeMachine\Domain\Repository\CoffeeMachineRepositoryInterface;
-use App\Shared\Infrastructure\CommandBusInterface;
+use App\Shared\Infrastructure\EventBusInterface;
 
 class StartMachineCommandHandler
 {
     public function __construct(
         private readonly CoffeeMachineRepositoryInterface $coffeeMachineRepository,
-        private readonly CommandBusInterface $commandBus,
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 
@@ -25,6 +25,6 @@ class StartMachineCommandHandler
 
         $machine->start();
         $this->coffeeMachineRepository->save($machine);
-        $this->commandBus->dispatchEvent(new MachineStartedEvent($machine->getId()));
+        $this->eventBus->dispatchEvent(new MachineStartedEvent($machine->getId()));
     }
 }

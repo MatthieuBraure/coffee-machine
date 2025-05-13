@@ -31,4 +31,9 @@ class CoffeeMachineRepository extends ServiceEntityRepository implements CoffeeM
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
     }
+
+    public function refresh(CoffeeMachine $entity): void
+    {
+        $this->getEntityManager()->refresh($entity);
+    }
 }

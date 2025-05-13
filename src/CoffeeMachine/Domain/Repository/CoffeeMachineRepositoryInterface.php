@@ -9,4 +9,6 @@ interface CoffeeMachineRepositoryInterface
     public function get(?int $id = null): CoffeeMachine;
 
     public function save(CoffeeMachine $entity): void;
+
+    public function refresh(CoffeeMachine $entity): void;
 }

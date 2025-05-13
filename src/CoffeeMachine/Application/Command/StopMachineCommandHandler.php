@@ -6,13 +6,13 @@ namespace App\CoffeeMachine\Application\Command;
 
 use App\CoffeeMachine\Application\Event\MachineStoppedEvent;
 use App\CoffeeMachine\Domain\Repository\CoffeeMachineRepositoryInterface;
-use App\Shared\Infrastructure\CommandBusInterface;
+use App\Shared\Infrastructure\EventBusInterface;
 
 class StopMachineCommandHandler
 {
     public function __construct(
         private readonly CoffeeMachineRepositoryInterface $coffeeMachineRepository,
-        private readonly CommandBusInterface $commandBus,
+        private readonly EventBusInterface $eventBus,
     ) {
     }
 
@@ -23,6 +23,6 @@ class StopMachineCommandHandler
         $machine->shutdown();
         $this->coffeeMachineRepository->save($machine);
 
-        $this->commandBus->dispatchEvent(new MachineStoppedEvent($machine->getId()));
+        $this->eventBus->dispatchEvent(new MachineStoppedEvent($machine->getId()));
     }
 }

@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CoffeeMachineRepository::class)]
 class CoffeeMachine
 {
+    private const int STEP_PREPARATION_TIME = 5;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -84,6 +85,30 @@ class CoffeeMachine
 
     public function canTakeOrder(): bool
     {
-        return $this->status->value === CoffeeMachineStatus::READY->value;
+        return $this->status->value === CoffeeMachineStatus::READY->value
+            || $this->status->value === CoffeeMachineStatus::RUNNING->value;
+    }
+
+    public function startCoffee(): void
+    {
+        $this->status = CoffeeMachineStatus::RUNNING;
+        $this->updatedAt = new \DateTimeImmutable('now');
+    }
+
+    public function finishCoffee(): void
+    {
+        $this->status = CoffeeMachineStatus::READY;
+        $this->updatedAt = new \DateTimeImmutable('now');
+    }
+
+    public function isUp(): bool
+    {
+        return $this->status->value === CoffeeMachineStatus::READY->value
+            || $this->status->value === CoffeeMachineStatus::RUNNING->value;
+    }
+
+    public function getStepPreparationTime(): int
+    {
+        return self::STEP_PREPARATION_TIME;
     }
 }

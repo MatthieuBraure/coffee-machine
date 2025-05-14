@@ -10,6 +10,7 @@ use App\CoffeeMachine\Domain\Entity\OrderStatus;
 class OrderView
 {
     public function __construct(
+        public int $id,
         public CoffeeSize $size,
         public int $intensity,
         public \DateTimeImmutable $createdAt,

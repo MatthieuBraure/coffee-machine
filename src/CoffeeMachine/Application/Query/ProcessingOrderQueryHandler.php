@@ -18,6 +18,7 @@ class ProcessingOrderQueryHandler
         $processingOrder = $this->orderRepository->getProcessing();
 
         return $processingOrder ? new OrderView(
+            id: $processingOrder->getId(),
             size: $processingOrder->getSize(),
             intensity: $processingOrder->getIntensity(),
             createdAt: $processingOrder->getCreatedAt(),

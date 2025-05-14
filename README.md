@@ -55,4 +55,10 @@ curl --request GET \
 --url https://localhost/api/coffee/pending \
 --header 'Content-Type: application/json'
 ```
+- Cancel a coffee (is it worth it?)
+```shell
+curl --request POST \
+--url https://localhost/api/coffee/{orderId}/cancel \
+--header 'Content-Type: application/json'
+```
 **Enjoy your coffee!**

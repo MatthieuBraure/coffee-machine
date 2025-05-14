@@ -29,7 +29,7 @@ Tous les états sont acceptés, passage à SHUTDOWN puis à OFF
 
 ## Reprise des commandes
 Lorsque la machine est éteinte, les commandes non traitées (status PENDING) sont conservées.
-Au redémarrage de la machine, les commandes en attente sont relancées (via l'event MachineReadyEvent).
+Au redémarrage de la machine, celles ci sont relancées (via l'event MachineReadyEvent).
 
 ## Gestion des commandes
 Le temps de préparation du café est défini par la machine et dépendant de la taille du café.

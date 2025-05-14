@@ -28,7 +28,10 @@
     <div style="display: flex; justify-content: space-between;">
         <!-- Commande en cours -->
         <div id="current-order" style="display: none; width: 45%;">
-            <h3>⏳ Commande en cours</h3>
+            <h3>
+                ⏳ Commande en cours
+                <a href="#" id="cancel-current-order" data-id="" style="margin-left: 10px">❌</a>
+            </h3>
             <p><strong>Taille :</strong> <span id="current-size"></span></p>
             <p><strong>Intensité :</strong> <span id="current-intensity"></span></p>
             <p><strong>Depuis :</strong> <span id="current-start-time"></span></p>
@@ -108,10 +111,32 @@
                 document.getElementById('current-start-time').textContent = new Date(order.createdAt.date).toLocaleString();
 
                 document.getElementById('current-order').style.display = 'block';
+
+                const cancelBtn = document.getElementById('cancel-current-order');
+                cancelBtn.dataset.id = order.id;
             } else {
                 document.getElementById('current-order').style.display = 'none';
             }
         }
+        document.getElementById('cancel-current-order').addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const orderId = e.target.dataset.id;
+            if (!orderId || !confirm('Annuler cette commande ?')) return;
+
+            try {
+                await fetch(`/api/coffee/${orderId}/cancel`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                location.reload();
+            } catch (error) {
+                console.error(error);
+                alert('Erreur lors de l\'annulation.');
+            }
+        });
 
         async function getPendingOrders() {
             // Récupérer et afficher les commandes en attente
@@ -125,6 +150,30 @@
                     pendingOrders.forEach(order => {
                         const li = document.createElement('li');
                         li.textContent = `${order.size} - Intensité : ${order.intensity}`;
+
+                        const cancelBtn = document.createElement('a');
+                        cancelBtn.href = '#';
+                        cancelBtn.textContent = ' ❌';
+                        cancelBtn.onclick = async (e) => {
+                            e.preventDefault();
+                            if (!confirm('Annuler cette commande ?')) return;
+
+                            try {
+                                await fetch(`/api/coffee/${order.id}/cancel`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                });
+                                location.reload();
+                            } catch (error) {
+                                console.error(error);
+                                alert('Erreur lors de l\'annulation de la commande.');
+                            }
+                        };
+
+                        li.appendChild(cancelBtn);
+
                         pendingList.appendChild(li);
                     });
                     document.getElementById('pending-orders').style.display = 'block';

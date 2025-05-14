@@ -119,7 +119,14 @@ class Order
 
     public function cancel(): void
     {
-        $this->status = OrderStatus::CANCELED;
-        $this->updatedAt = new \DateTimeImmutable('now');
+        if (OrderStatus::DONE !== $this->status) {
+            $this->status = OrderStatus::CANCELED;
+            $this->updatedAt = new \DateTimeImmutable('now');
+        }
+    }
+
+    public function isCanceled(): bool
+    {
+        return OrderStatus::CANCELED === $this->status;
     }
 }

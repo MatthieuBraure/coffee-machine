@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\CoffeeMachine\Infrastructure\Controller;
 
+use App\CoffeeMachine\Application\Command\CancelCoffeeCommand;
 use App\CoffeeMachine\Application\Command\OrderCoffeeCommand;
 use App\CoffeeMachine\Application\Query\CompletedOrderQuery;
 use App\CoffeeMachine\Application\Query\PendingOrderQuery;
@@ -60,5 +61,19 @@ class CoffeeController extends AbstractController
     public function processing(): Response
     {
         return new JsonResponse($this->queryBus->handle(new ProcessingOrderQuery()));
+    }
+
+    #[Route('/api/coffee/{orderId}/cancel', name: 'api_coffee_cancel', methods: ['POST'])]
+    public function cancel(int $orderId): Response
+    {
+        try {
+            $command = new CancelCoffeeCommand();
+            $command->orderId = (int) $orderId;
+            $this->commandBus->handle($command);
+        } catch (ValidationFailedException $exception) {
+            throw new ValidationException($exception->getViolations());
+        }
+
+        return new JsonResponse(['message' => 'ok'], Response::HTTP_CREATED);
     }
 }

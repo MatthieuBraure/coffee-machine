@@ -24,23 +24,34 @@ class OrderCreatedEventHandler
             return;
         }
         $order = $this->orderRepository->get($event->id);
+        if (null === $order || true === $order->isCanceled()) {
+            return;
+        }
+
         $order->start();
         $this->orderRepository->save($order);
         $machine->startCoffee();
         $this->coffeeMachineRepository->save($machine);
         foreach (CoffeeSize::cases() as $size) {
             sleep($machine->getStepPreparationTime());
-            if ($order->getSize() === $size) {
-                break;
-            }
-
             $this->coffeeMachineRepository->refresh($machine);
             if (false === $machine->isUp()) {
                 // Someone stop the machine, we lost this coffee
                 return;
             }
-        }
 
+            if ($order->getSize() === $size) {
+                break;
+            }
+
+            $this->orderRepository->refresh($order);
+            if (true === $order->isCanceled()) {
+                $machine->finishCoffee();
+                $this->coffeeMachineRepository->save($machine);
+
+                return;
+            }
+        }
         $machine->finishCoffee();
         $this->coffeeMachineRepository->save($machine);
         $order->finish();

@@ -18,7 +18,7 @@ class OrderRepository extends ServiceEntityRepository implements OrderRepository
         parent::__construct($registry, Order::class);
     }
 
-    public function get(int $id): Order
+    public function get(int $id): ?Order
     {
         return $this->find($id);
     }
@@ -57,5 +57,10 @@ class OrderRepository extends ServiceEntityRepository implements OrderRepository
             ->orderBy('o.updatedAt', 'DESC')
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function refresh(Order $entity): void
+    {
+        $this->getEntityManager()->refresh($entity);
     }
 }

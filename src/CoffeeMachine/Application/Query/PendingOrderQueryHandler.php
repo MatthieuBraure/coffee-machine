@@ -22,6 +22,7 @@ class PendingOrderQueryHandler
         $pendingCoffees = $this->orderRepository->getPending();
 
         return array_map(fn (Order $order) => new OrderView(
+            id: $order->getId(),
             size: $order->getSize(),
             intensity: $order->getIntensity(),
             createdAt: $order->getCreatedAt(),

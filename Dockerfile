@@ -28,6 +28,7 @@ RUN set -eux; \
 	install-php-extensions \
 		@composer \
 		apcu \
+		amqp \
 		intl \
 		opcache \
 		zip \

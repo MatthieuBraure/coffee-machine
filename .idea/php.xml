@@ -98,6 +98,7 @@
       <path value="$PROJECT_DIR$/vendor/phpstan/phpstan-doctrine" />
       <path value="$PROJECT_DIR$/vendor/phpstan/extension-installer" />
       <path value="$PROJECT_DIR$/vendor/symfony/doctrine-messenger" />
+      <path value="$PROJECT_DIR$/vendor/symfony/amqp-messenger" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.3" />

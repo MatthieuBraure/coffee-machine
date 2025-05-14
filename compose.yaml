@@ -70,7 +70,14 @@ services:
             published: ${POSTGRES_PORT:-5432}
             protocol: tcp
 ###< doctrine/doctrine-bundle ###
-
+  rabbitmq:
+      image: rabbitmq:3-management
+      ports:
+          - "5672:5672"       # Port utilisé par l'application
+          - "15672:15672"     # Port de l'interface web RabbitMQ
+      environment:
+          RABBITMQ_DEFAULT_USER: guest
+          RABBITMQ_DEFAULT_PASS: guest
 volumes:
   caddy_data:
   caddy_config:

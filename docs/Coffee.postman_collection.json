@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "f2e2002f-a6a5-48bc-89b7-9da09792fce7",
+		"name": "Coffee",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28151043",
+		"_collection_link": "https://vimeet365.postman.co/workspace/Vimeet-365~a5124ad9-170b-4c13-98b9-b337426da769/collection/28151043-f2e2002f-a6a5-48bc-89b7-9da09792fce7?action=share&source=collection_link&creator=28151043"
+	},
+	"item": [
+		{
+			"name": "Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}coffee-machine/status",
+					"host": [
+						"{{baseUrl}}coffee-machine"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pending List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}coffee/pending",
+					"host": [
+						"{{baseUrl}}coffee"
+					],
+					"path": [
+						"pending"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Completed List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}coffee/complete",
+					"host": [
+						"{{baseUrl}}coffee"
+					],
+					"path": [
+						"complete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Processing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}coffee/complete",
+					"host": [
+						"{{baseUrl}}coffee"
+					],
+					"path": [
+						"complete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}coffee-machine/start",
+					"host": [
+						"{{baseUrl}}coffee-machine"
+					],
+					"path": [
+						"start"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stop",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}coffee-machine/stop",
+					"host": [
+						"{{baseUrl}}coffee-machine"
+					],
+					"path": [
+						"stop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order a coffee",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"intensity\": 5,\r\n    \"size\": \"expresso\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}coffee/order",
+					"host": [
+						"{{baseUrl}}coffee"
+					],
+					"path": [
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel a coffee",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}coffee/1/cancel",
+					"host": [
+						"{{baseUrl}}coffee"
+					],
+					"path": [
+						"1",
+						"cancel"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

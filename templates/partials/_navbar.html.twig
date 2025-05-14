@@ -1,0 +1,12 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+
+<nav style="background: #f8f9fa; padding: 1rem; display: flex; gap: 1rem;">
+    <a href="{{ path('index') }}"
+       style="{{ currentRoute == 'index' ? 'font-weight: bold; text-decoration: underline;' : '' }}">
+        🏠 Accueil
+    </a>
+    <a href="{{ path('order_history') }}"
+       style="{{ currentRoute == 'order_history' ? 'font-weight: bold; text-decoration: underline;' : '' }}">
+        📜 Historique
+    </a>
+</nav>

@@ -4,6 +4,7 @@
 1. If not already done, [install Docker Compose](https://docs.docker.com/compose/install/) (v2.10+)
 2. Run `make start` to install the project
 4. Open `https://localhost` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
+4.1 A react app is also available at `http://localhost:3000/`
 5. Run `make down` to stop the Docker containers.
 
 ## Features
